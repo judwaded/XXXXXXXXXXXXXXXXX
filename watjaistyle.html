@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WATJAISTYLE</title>
+    <link rel="icon" type="image/x-icon" href="Logo_JUDWADED.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.96));
+            --text-color: #ffffff;
+            --sub-text: #888;
+            --bar-bg: rgba(255, 255, 255, 0.07);
+            --bar-border: rgba(255, 255, 255, 0.12);
+            --accent-color: #ffffff;
+            --active-bg: #ffffff;
+            --active-text: #000000;
+            --fire-color: #ffffff;
+        }
+
+        .light-mode {
+            --bg-gradient: linear-gradient(rgba(240, 240, 240, 0.9), rgba(245, 245, 245, 0.95));
+            --text-color: #1a1a1a;
+            --sub-text: #666;
+            --bar-bg: #ffffff;
+            --bar-border: rgba(0, 0, 0, 0.05);
+            --active-bg: #000000;
+            --active-text: #ffffff;
+            --fire-color: #000000;
+        }
+
+        body {
+            background: var(--bg-gradient), url('https://img5.pic.in.th/file/secure-sv1/603927950_122117736015033306_4582820458019689597_n.png');
+            background-size: cover;
+            background-position: center top; 
+            background-attachment: fixed;
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        #fire-container { position: fixed; bottom: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+        .particle { position: absolute; bottom: -20px; background: var(--fire-color); border-radius: 50%; filter: blur(1px); opacity: 0.8; box-shadow: 0 0 10px var(--fire-color); animation: rise linear infinite; }
+        @keyframes rise { 0% { transform: translateY(0) translateX(0); opacity: 0.8; } 50% { transform: translateY(-50vh) translateX(20px); opacity: 0.5; } 100% { transform: translateY(-100vh) translateX(-20px); opacity: 0; } }
+
+        .main-container { max-width: 1400px; margin: 0 auto; padding: 0 40px; position: relative; z-index: 10; }
+        .header-section { padding: 60px 0 10px 0; }
+
+        .text-brand { 
+            font-family: 'Orbitron', sans-serif; 
+            font-size: clamp(45px, 9vw, 95px);
+            font-weight: 900; 
+            margin: 0; 
+            letter-spacing: -4px;
+            line-height: 0.8; 
+            background: linear-gradient(to bottom, #ffffff 40%, #a2a2a2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+        }
+
+        .text-year { 
+            font-family: 'Orbitron', sans-serif; 
+            font-size: clamp(18px, 3.5vw, 32px);
+            font-weight: 700; 
+            margin: 10px 0 0 5px; 
+            line-height: 1; 
+            letter-spacing: 12px; 
+            text-transform: uppercase;
+            color: var(--accent-color);
+            opacity: 0.8;
+            filter: blur(0.3px);
+        }
+        
+        .status-bar { margin-top: 15px; font-family: 'Rajdhani', sans-serif; color: var(--sub-text); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; }
+
+        .search-filter-bar {
+            display: flex;
+            align-items: center;
+            background: var(--bar-bg);
+            border: 1px solid var(--bar-border);
+            border-radius: 100px;
+            padding: 8px 10px 8px 25px;
+            margin-top: 40px;
+            backdrop-filter: blur(25px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .search-group { display: flex; align-items: center; flex-grow: 1; gap: 15px; }
+        .search-icon { color: var(--sub-text); font-size: 18px; opacity: 0.8; }
+        .search-input { background: transparent; border: none; color: var(--text-color); font-size: 16px; width: 100%; outline: none; font-family: 'Inter', sans-serif; }
+        .search-input::placeholder { color: var(--sub-text); opacity: 0.5; }
+
+        .filter-group { display: flex; align-items: center; gap: 5px; }
+        .filter-btn {
+            padding: 12px 26px; border-radius: 100px; border: none; background: transparent;
+            color: var(--sub-text); font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; white-space: nowrap;
+        }
+        .filter-btn.active { background: #ffffff; color: #000000 !important; box-shadow: 0 4px 15px rgba(255,255,255,0.2); }
+        .filter-btn:not(.active):hover { color: var(--text-color); }
+
+        .theme-toggle-pill {
+            width: 45px; height: 45px; border-radius: 50%; border: none; background: #ffffff; color: #000000;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-left: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
+        }
+        .theme-toggle-pill:hover { transform: rotate(180deg) scale(1.1); }
+        .light-mode .theme-toggle-pill { background: #000000; color: #ffffff; }
+
+        .horizontal-divider {
+            margin: 40px 0;
+            height: 1.5px;
+            background: #ffffff;
+            opacity: 0.6;
+            border-radius: 10px;
+        }
+
+        .grid-wrapper { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 35px; padding-bottom: 100px; }
+        .photo-frame { background: var(--bar-bg); border: 1px solid var(--bar-border); border-radius: 32px; padding: 22px; display: flex; flex-direction: column; align-items: center; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); backdrop-filter: blur(10px); }
+        .photo-frame:hover { transform: translateY(-12px); border-color: var(--accent-color); }
+        .main-photo { width: 100%; aspect-ratio: 1/1; object-fit: contain; background: #111; border-radius: 24px; margin-bottom: 20px; }
+        .profile-name { font-size: 20px; font-weight: 700; margin: 0 0 6px 0; }
+        .profile-role { font-family: 'Rajdhani', sans-serif; font-size: 13px; color: var(--sub-text); letter-spacing: 2px; text-transform: uppercase; }
+        .fb-btn { margin-top: 20px; width: 100%; padding: 15px; background: #fff; color: #000; text-decoration: none; text-align: center; border-radius: 16px; font-weight: 700; transition: 0.3s; }
+        .fb-btn:hover { background: #000; color: #fff; }
+
+        .custom-footer {
+            padding: 80px 20px;
+            background: transparent;
+            border-top: 1px solid var(--bar-border);
+            margin-top: 50px;
+        }
+
+        .footer-container-centered {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 40px;
+        }
+
+        .brand-border-box {
+            border: 3px solid var(--text-color);
+            padding: 8px 20px;
+            text-align: left;
+            font-family: 'Orbitron', sans-serif;
+            line-height: 1;
+        }
+
+        .box-main-text {
+            font-size: clamp(30px, 4vw, 50px);
+            font-weight: 900;
+            letter-spacing: -2px;
+        }
+
+        .footer-right-info {
+            text-align: left;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .footer-brand-title {
+            font-size: 22px;
+            color: var(--text-color);
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+        }
+
+        .footer-nav-links {
+            margin-bottom: 10px;
+        }
+
+        .footer-nav-links a {
+            text-decoration: none;
+            color: var(--sub-text);
+            font-size: 14px;
+            margin-right: 20px;
+            transition: 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .footer-nav-links a:hover {
+            color: var(--text-color);
+        }
+
+        .copyright-text {
+            color: var(--sub-text);
+            font-size: 12px;
+            opacity: 0.6;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* --- New Mobile & Responsive Fixes --- */
+        @media (max-width: 850px) {
+            .footer-container-centered {
+                flex-direction: column;
+                gap: 30px;
+                text-align: center;
+            }
+            .footer-right-info {
+                text-align: center;
+            }
+            .footer-nav-links a {
+                margin: 0 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container { padding: 0 20px; }
+            .header-section { padding: 40px 0 10px 0; }
+            
+            .search-filter-bar {
+                flex-direction: column;
+                border-radius: 25px;
+                padding: 15px;
+                gap: 15px;
+                box-sizing: border-box;
+                height: auto;
+            }
+
+            .search-group { 
+                width: 100%; 
+                border-bottom: 1px solid var(--bar-border); 
+                padding-bottom: 12px; 
+            }
+            
+            .filter-group { 
+                width: 100%; 
+                overflow-x: auto; 
+                padding-bottom: 8px;
+                justify-content: flex-start;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .filter-btn { padding: 10px 18px; font-size: 13px; }
+            
+            .grid-wrapper {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 20px;
+            }
+
+            .theme-toggle-pill {
+                flex-shrink: 0;
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="fire-container"></div>
+
+    <audio id="bgMusic" loop>
+        <source src="watjaistyle.mp4" type="audio/mpeg">
+    </audio>
+
+    <div class="main-container">
+        <header class="header-section">
+            <div class="text-brand">WATJAISTYLE</div>
+            <div class="text-year">Born To Win</div>
+            <div class="status-bar">LAST NAME // WATJAISTYLE</div>
+
+            <div class="search-filter-bar">
+                <div class="search-group">
+                    <span class="search-icon">✎</span>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search members...">
+                </div>
+                <div class="filter-group">
+                    <button class="filter-btn active" data-role="all">All</button>
+                    <button class="filter-btn" data-role="founder">Founder</button>
+                    <button class="filter-btn" data-role="leader">Leader</button>
+                    <button class="filter-btn" data-role="member">Member</button>
+                    <button class="theme-toggle-pill" onclick="toggleTheme()" id="themeBtn">◐</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="horizontal-divider"></div>
+
+        <div class="grid-wrapper" id="profileGrid">
+            <div class="photo-frame" data-role="founder">
+               <img src="https://scontent.futp1-2.fna.fbcdn.net/v/t39.30808-6/604675288_122117734443033306_3929807813355299709_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=Xiji6RCFyHAQ7kNvwGF_KKW&_nc_oc=Adnm6I0QcAgQ9H8-nl3Rnnf2ju4WLhFFlJTsZQE6EKu_o9RJ9NWgcg3aiYZaapZUM5Q&_nc_zt=23&_nc_ht=scontent.futp1-2.fna&_nc_gid=RR4X97UQuT8ygzRdP7npyQ&oh=00_AfpEU4QqhxI35HTQREuCUtS_-sZxQCreBTainWx8cnB6LQ&oe=69742E6E" class="main-photo">
+                <h3 class="profile-name">Jesper FivedoubleOne</h3>
+                <p class="profile-role">Founder</p>
+                <a href="https://www.facebook.com/jesper.watsutjai" class="fb-btn">VIEW PROFILE</a>
+            </div> 
+
+            <div class="photo-frame" data-role="leader">
+                <img src="https://scontent.futp1-1.fna.fbcdn.net/v/t39.30808-6/603067754_122180196302450386_936583463510394457_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=JcKed_-CASMQ7kNvwHl9NdV&_nc_oc=AdkiXgMqIIsok9o_xSG3TaGdDbQpHQctFa6X4h6aHpdEk5PTtwLlbOyDI4l9AxuKqCI&_nc_zt=23&_nc_ht=scontent.futp1-1.fna&_nc_gid=iMbMEfC6akHOXxjFyRLdFw&oh=00_Afrqr_s20HQFYwKdyzskbkpQmi10ua7xM_pUI_IaI3SPKg&oe=697452E0" class="main-photo">
+                <h3 class="profile-name">Jayb Watjaistyle</h3>
+                <p class="profile-role">Leader</p>
+                <a href="https://www.facebook.com/profile.php?id=61563511580459" class="fb-btn">VIEW PROFILE</a>
+            </div>
+
+            <div class="photo-frame" data-role="leader">
+                <img src="https://scontent.futp1-2.fna.fbcdn.net/v/t39.30808-1/600285321_122106995991148481_4602565567085857479_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=104&ccb=1-7&_nc_sid=e99d92&_nc_ohc=p_4x8SDBCCUQ7kNvwFN5JyC&_nc_oc=AdltL6ObdXXBHHbvGrc5E7eyKkUoeZa1Bb5UUpZBF5zivDe6uOvPzFcH30ggZkmPnlI&_nc_zt=24&_nc_ht=scontent.futp1-2.fna&_nc_gid=OakJGGMG39E-x0pKdXypPg&oh=00_Afr5d9yM_g99AkhoudqtU9DnHOjw9YiYvx0376KoNZqUzA&oe=69743D8E" class="main-photo">
+                <h3 class="profile-name">Kaitoon Watjaistyle</h3>
+                <p class="profile-role">Leader</p>
+                <a href="https://www.facebook.com/profile.php?id=61584454437937" class="fb-btn">VIEW PROFILE</a>
+            </div>
+
+            <div class="photo-frame" data-role="leader">
+                <img src="https://scontent.futp1-2.fna.fbcdn.net/v/t39.30808-6/617045854_122155819994892901_6044640752622946617_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=LO9riE8TMRQQ7kNvwE-8Eek&_nc_oc=AdkbYAE37XFipQzYMyL12_NCW5M5wSiYTymJaEnzVZkSW1hOzll-GCPfd63CmvLa7_g&_nc_zt=23&_nc_ht=scontent.futp1-2.fna&_nc_gid=nqsLSxGhRPU9k9Pdyzy_vg&oh=00_AfoiklH96ACVHaJFZ-gQByhfd_GMlOaxHU4W8HJtzZrGrw&oe=69742FD7" class="main-photo">
+                <h3 class="profile-name">Vtecx WatJaistyle</h3>
+                <p class="profile-role">Leader</p>
+                <a href="https://www.facebook.com/profile.php?id=61576787041888&comment_id=Y29tbWVudDoxMjIxMTgyNDQ2OTUwMzMzMDZfMTM3MzkzNTk2MzY3NTgyNQ%3D%3D" class="fb-btn">VIEW PROFILE</a>
+            </div>
+
+            <div class="photo-frame" data-role="member">
+                <img src="https://scontent.futp1-2.fna.fbcdn.net/v/t39.30808-6/526661944_691301583939890_3669656912896478903_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=qcSobVbzNIcQ7kNvwHHU144&_nc_oc=AdkHXEgNnxczt9XcXUeMvx0w8gSa1R80Vq2Y_2UnV9ZNChdptCk_lkTL2zvHRHcqz4A&_nc_zt=23&_nc_ht=scontent.futp1-2.fna&_nc_gid=1DoWjBXiAY90vnWWuTnOkA&oh=00_AfqpYWUr-kFsGTT4C4eUyY0bFTIYl84yT5l0Cuc8W01cgw&oe=69744246" class="main-photo">
+                <h3 class="profile-name">Auan WatJaistyle</h3>
+                <p class="profile-role">MEMBER</p>
+                <a href="https://www.facebook.com/felix.wairai.zerozerofour?locale=th_TH" class="fb-btn">VIEW PROFILE</a>
+            </div>
+
+            <div class="photo-frame" data-role="member">
+                <img src="https://scontent.futp1-2.fna.fbcdn.net/v/t39.30808-6/571142530_122150577764686122_6670607892506461835_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KVZ_l4buntQQ7kNvwEn8f4K&_nc_oc=AdlJPdvRNjWJY4eVg9Yj4yKrewhZpObHX6U_CxoyHM1lYtarUIK9r6HCICAN4lxPhpU&_nc_zt=23&_nc_ht=scontent.futp1-2.fna&_nc_gid=dEGo6Eh5auAdhdpCBobDdA&oh=00_AfqXZMBvaEffqVkjU0nk4C0wNF8F3NgJqJ3bXejVBBOlzA&oe=69744063" class="main-photo">
+                <h3 class="profile-name">Job WatJaistyle</h3>
+                <p class="profile-role">MEMBER</p>
+                <a href="https://www.facebook.com/profile.php?id=61570432919978&locale=th_TH" class="fb-btn">VIEW PROFILE</a>
+            </div>
+
+            <div class="photo-frame" data-role="member">
+                <img src="https://scontent.futp1-1.fna.fbcdn.net/v/t39.30808-1/520880945_122201223992269010_7353620250977748253_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=100&ccb=1-7&_nc_sid=e99d92&_nc_ohc=3MCvUWoWexcQ7kNvwFf_P-1&_nc_oc=AdmawW4bijS2yoxOLgMQNv3ZFe5Z2ZDiWwIsxWaz_mQzdTGiAMJjj7dngVK4a75bXXc&_nc_zt=24&_nc_ht=scontent.futp1-1.fna&_nc_gid=-nD5pzCMPyOPgot6Jev36Q&oh=00_AfrgughuEaPgzQj-GjoMs1ZS_W3miLZOkrxUfuu7XdKB3Q&oe=69742A1D" class="main-photo">
+                <h3 class="profile-name">Mavis WatJaistyle</h3>
+                <p class="profile-role">MEMBER</p>
+                <a href="https://www.facebook.com/mavis.gerllet" class="fb-btn">VIEW PROFILE</a>
+            </div>
+
+            <div class="photo-frame" data-role="member">
+                <img src="https://scontent.futp1-1.fna.fbcdn.net/v/t39.30808-6/607603260_122117082093061593_3312282678453716875_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=Ln4VGkV2zOwQ7kNvwE_HYOL&_nc_oc=AdkatkQDmOmtHf38ZasTsJsbNupn3uM5tBrugRfV9HKmxho9ROXUQlIcdBRjM9hYrxo&_nc_zt=23&_nc_ht=scontent.futp1-1.fna&_nc_gid=ROFc7BDDmP0oqFspgqhutw&oh=00_AfpZtq5piKK44-b2KMO37B5JZW82qR_UGuTPtpvYekeqZA&oe=697445E7" class="main-photo">
+                <h3 class="profile-name">Lotus WatJaistyle</h3>
+                <p class="profile-role">MEMBER</p>
+                <a href="https://www.facebook.com/profile.php?id=61581847803307" class="fb-btn">VIEW PROFILE</a>
+            </div>
+
+            <div class="photo-frame" data-role="member">
+                <img src="#" class="main-photo">
+                <h3 class="profile-name">Taddy WatJaistyle</h3>
+                <p class="profile-role">MEMBER</p>
+                <a href="#" class="fb-btn">VIEW PROFILE</a>
+            </div>
+
+            <div class="photo-frame" data-role="member">
+                <img src="#" class="main-photo">
+                <h3 class="profile-name">Sushi WatJaistyle</h3>
+                <p class="profile-role">MEMBER</p>
+                <a href="#" class="fb-btn">VIEW PROFILE</a>
+            </div>
+
+            <div class="photo-frame" data-role="member">
+                <img src="#" class="main-photo">
+                <h3 class="profile-name">Gus WatJaistylee</h3>
+                <p class="profile-role">MEMBER</p>
+                <a href="#" class="fb-btn">VIEW PROFILE</a>
+            </div>
+
+            <div class="photo-frame" data-role="member">
+                <img src="#" class="main-photo">
+                <h3 class="profile-name">Hun WatJaistyle</h3>
+                <p class="profile-role">MEMBER</p>
+                <a href="#" class="fb-btn">VIEW PROFILE</a>
+            </div>
+
+            <div class="photo-frame" data-role="member">
+                <img src="#" class="main-photo">
+                <h3 class="profile-name">Jeff WatJaistyle</h3>
+                <p class="profile-role">MEMBER</p>
+                <a href="#" class="fb-btn">VIEW PROFILE</a>
+            </div>
+        </div>
+
+        <footer class="custom-footer">
+            <div class="footer-container-centered">
+                <div class="footer-left-box">
+                    <div class="brand-border-box">
+                        <div class="box-main-text">WATJAISTYLE</div>
+                    </div>
+                </div>
+                <div class="footer-right-info">
+                    <h2 class="footer-brand-title">WATJAISTYLE</h2>
+                    <div class="footer-nav-links">
+                        <a href="https://www.facebook.com/jesper.watsutjai">WATJAISTYLE Support</a>
+                        <a href="Privacypolicy.html">Privacy Policy</a>
+                    </div>
+                    <p class="copyright-text">© 2026 JUDWADED 2K26. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const btn = document.getElementById('themeBtn');
+            btn.innerText = document.body.classList.contains('light-mode') ? '◑' : '◐';
+        }
+
+        function createFire() {
+            const container = document.getElementById('fire-container');
+            if(!container) return;
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const size = Math.random() * 6 + 2 + 'px';
+            particle.style.width = size;
+            particle.style.height = size;
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.animationDuration = Math.random() * 3 + 2 + 's';
+            container.appendChild(particle);
+            setTimeout(() => { particle.remove(); }, 5000);
+        }
+        setInterval(createFire, 200);
+
+        const bgMusic = document.getElementById('bgMusic');
+        if(bgMusic) bgMusic.volume = 0.2;
+        
+        const initAudio = () => {
+            bgMusic.play().then(() => {
+                ["click", "touchstart", "scroll", "wheel", "keydown", "mousemove"].forEach(ev => 
+                    document.removeEventListener(ev, initAudio)
+                );
+            }).catch(() => {
+            });
+        };
+
+        ["click", "touchstart", "scroll", "wheel", "keydown", "mousemove"].forEach(ev => 
+            document.addEventListener(ev, initAudio)
+        );
+
+        const searchInput = document.getElementById('searchInput');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const frames = document.querySelectorAll('.photo-frame');
+
+        function filterProfiles() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeRole = document.querySelector('.filter-btn.active').dataset.role;
+
+            frames.forEach(frame => {
+                const name = frame.querySelector('.profile-name').innerText.toLowerCase();
+                const role = frame.dataset.role;
+                const matchesSearch = name.includes(searchTerm);
+                const matchesFilter = (activeRole === 'all' || role === activeRole);
+                frame.style.display = (matchesSearch && matchesFilter) ? 'flex' : 'none';
+            });
+        }
+
+        searchInput.addEventListener('input', filterProfiles);
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filterProfiles();
+            });
+        });
+    </script>
+</body>
+</html>
