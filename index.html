@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JUDWADED 2K26 - Official</title>
+    <title>JUDWADED 2K26</title>
+    <link rel="icon" type="image/x-icon" href="Logo_JUDWADED.ico">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Orbitron:wght@900&family=Rajdhani:wght@500&display=swap" rel="stylesheet">
 
@@ -95,14 +96,14 @@
         .button-group {
             display: flex;
             flex-direction: column;
-            gap: 20px; /* ระยะห่างระหว่างแถวบนและแถวล่าง */
+            gap: 20px; 
             width: 80%;
         }
 
         .top-row {
             display: flex;
             justify-content: center;
-            gap: 20px; /* ระยะห่างระหว่าง 2 ปุ่มบน */
+            gap: 20px; 
         }
 
         .bottom-row {
@@ -123,7 +124,7 @@
             border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
-            flex: 1; /* ให้ปุ่มแถวบนกว้างเท่ากัน */
+            flex: 1; 
             max-width: 250px;
             text-align: center;
             text-decoration: none;
@@ -137,13 +138,17 @@
         }
 
         .btn-large {
-            max-width: 200px; /* ให้ปุ่มล่างยาวครอบคลุมพื้นที่ 2 ปุ่มบน */
+            max-width: 200px; 
         }
     </style>
 </head>
 <body>
 
     <div id="fire-container"></div>
+
+    <audio id="bgMusic" loop>
+        <source src="FOXX.mp3" type="audio/mpeg">
+    </audio>
 
     <div class="main-container">
         <div class="content-wrapper">
@@ -170,6 +175,7 @@
     </div>
 
     <script>
+        // --- Fire Particles Logic ---
         function createParticles() {
             const container = document.getElementById('fire-container');
             const particleCount = 40; 
@@ -188,6 +194,26 @@
             }
         }
         createParticles();
+
+        // --- ระบบเล่นเพลงอัตโนมัติ (No Button) ---
+        const bgMusic = document.getElementById('bgMusic');
+        bgMusic.volume = 0.2; // ความดัง 20%
+
+        const startMusic = () => {
+            bgMusic.play().then(() => {
+                // เมื่อเพลงเริ่มเล่นแล้ว ให้ลบ Event ทั้งหมดออก
+                ["click", "touchstart", "scroll", "mousemove", "keydown"].forEach(ev => 
+                    document.removeEventListener(ev, startMusic)
+                );
+            }).catch(err => {
+                // Browser บล็อกอยู่ จะลองใหม่ในการขยับครั้งต่อไป
+            });
+        };
+
+        // ดักจับการขยับทุกอย่างเพื่อสั่ง Play
+        ["click", "touchstart", "scroll", "mousemove", "keydown"].forEach(ev => 
+            document.addEventListener(ev, startMusic)
+        );
     </script>
 </body>
 </html>
