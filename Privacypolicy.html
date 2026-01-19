@@ -30,7 +30,8 @@
             font-family: 'Inter', sans-serif;
             color: var(--text-color);
             transition: all 0.3s ease;
-            overflow: hidden; 
+            /* แก้ไข: ยอมให้ Scroll แนวตั้งได้ในมือถือ ป้องกันเนื้อหาหาย */
+            overflow-x: hidden; 
         }
 
         #fire-container { position: fixed; bottom: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
@@ -40,45 +41,59 @@
         .main-container { 
             max-width: 1800px; 
             margin: 0 auto; 
-            padding: 0 60px; 
+            padding: 0 20px; /* ปรับลด Padding ลงหน่อยเพื่อพื้นที่ในมือถือ */
             position: relative; 
             z-index: 10; 
         }
 
+        .content-wrapper {
+            display: flex;
+            justify-content: space-between; 
+            align-items: center;            
+            min-height: 100vh; /* ใช้ min-height แทน height เพื่อรองรับเนื้อหาล้น */
+            width: 100%;
+            gap: 40px; 
+            padding: 40px 0;
+            box-sizing: border-box;
+        }
+
+        /* Responsive Layout */
         @media (max-width: 1100px) { 
             .content-wrapper { 
                 flex-direction: column; 
                 text-align: center;
                 justify-content: center !important;
             }
-            .main-container { padding: 0 20px; }
-            .header-section { margin-bottom: 40px; flex: none; }
-            .center-box { width: 100% !important; max-width: 500px; height: auto !important; padding: 40px 20px; }
-        }
-
-        .content-wrapper {
-            display: flex;
-            justify-content: space-between; 
-            align-items: center;           
-            height: 100vh;
-            width: 100%;
-            gap: 40px; 
+            .header-section { 
+                margin-bottom: 30px; 
+                flex: none; 
+                width: 100%;
+                min-width: auto; /* นำค่า 400px ออก */
+            }
+            .center-box { 
+                width: 100% !important; 
+                max-width: 600px; /* ให้กว้างขึ้นใน Tablet */
+                height: auto !important; 
+                padding: 40px 20px; 
+            }
         }
 
         .header-section { 
             flex: 1; 
-            min-width: 400px;
+            /* ลบ min-width: 400px ออก เพื่อไม่ให้เบียดจอเล็ก */
         }
 
-        .text-brand { font-family: 'Orbitron', sans-serif; font-size: clamp(40px, 6vw, 85px); font-weight: 900; margin: 0; letter-spacing: -2px; line-height: 0.9; }
-        .text-year { font-family: 'Orbitron', sans-serif; font-size: clamp(30px, 4vw, 70px); font-weight: 900; margin: 0; line-height: 0.9; }
+        .text-brand { font-family: 'Orbitron', sans-serif; font-size: clamp(40px, 8vw, 85px); font-weight: 900; margin: 0; letter-spacing: -2px; line-height: 0.9; }
+        .text-year { font-family: 'Orbitron', sans-serif; font-size: clamp(30px, 6vw, 70px); font-weight: 900; margin: 0; line-height: 0.9; }
         .status-bar { margin-top: 15px; font-family: 'Rajdhani', sans-serif; color: var(--sub-text); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; }
 
         .center-box {
-            width: 700px; 
-            height: 400px; 
+            width: 90%; /* เปลี่ยนเป็น % เพื่อความยืดหยุ่น */
+            max-width: 700px; 
+            min-height: 350px; /* ใช้ min-height แทน height */
             background: var(--bar-bg);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px); /* สำหรับ Safari */
             border: 1px solid var(--bar-border);
             border-radius: 35px;
             display: flex;
@@ -86,19 +101,23 @@
             align-items: center;
             box-shadow: 0 40px 80px rgba(0,0,0,0.6);
             z-index: 20;
+            padding: 30px;
+            box-sizing: border-box;
         }
 
         .button-group {
             display: flex;
             flex-direction: column;
             gap: 20px; 
-            width: 80%;
+            width: 100%;
+            max-width: 500px;
         }
 
         .top-row {
             display: flex;
             justify-content: center;
-            gap: 20px; 
+            gap: 15px; 
+            flex-wrap: wrap; /* ให้ปุ่มตัดลงมาได้ถ้าจอมือถือเล็กมาก */
         }
 
         .bottom-row {
@@ -110,7 +129,7 @@
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--bar-border);
             color: white;
-            padding: 18px 40px;
+            padding: 18px 20px;
             font-family: 'Rajdhani', sans-serif;
             font-size: 16px;
             font-weight: bold;
@@ -120,9 +139,10 @@
             cursor: pointer;
             transition: all 0.3s ease;
             flex: 1; 
-            max-width: 250px;
+            min-width: 140px; /* กันปุ่มเล็กเกินไป */
             text-align: center;
             text-decoration: none;
+            display: inline-block;
         }
 
         .btn:hover {
@@ -133,17 +153,20 @@
         }
 
         .btn-large {
-            max-width: 200px; 
+            width: 100%;
+            max-width: 100%; /* ให้เต็มพื้นที่ในแถวของตัวเอง */
+        }
+
+        /* ปรับแต่งสำหรับมือถือจอเล็กพิเศษ */
+        @media (max-width: 400px) {
+            .btn { font-size: 14px; padding: 15px 10px; }
+            .text-brand { font-size: 45px; }
         }
     </style>
 </head>
 <body>
 
     <div id="fire-container"></div>
-
-    <audio id="bgMusic" loop>
-        <source src="FOXX.mp3" type="audio/mpeg">
-    </audio>
 
     <div class="main-container">
         <div class="content-wrapper">
@@ -172,7 +195,10 @@
     <script>
         function createParticles() {
             const container = document.getElementById('fire-container');
-            const particleCount = 40; 
+            const particleCount = 25; // ลดจำนวนลงหน่อยในมือถือเพื่อไม่ให้หน่วง
+            if (window.innerWidth < 768) {
+                 // ถ้าเป็นมือถืออาจจะลด particleCount ลงอีกได้
+            }
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
@@ -188,22 +214,6 @@
             }
         }
         createParticles();
-
-        const bgMusic = document.getElementById('bgMusic');
-        bgMusic.volume = 0.2;
-
-        const startMusic = () => {
-            bgMusic.play().then(() => {
-                ["click", "touchstart", "scroll", "mousemove", "keydown"].forEach(ev => 
-                    document.removeEventListener(ev, startMusic)
-                );
-            }).catch(err => {
-            });
-        };
-
-        ["click", "touchstart", "scroll", "mousemove", "keydown"].forEach(ev => 
-            document.addEventListener(ev, startMusic)
-        );
     </script>
 </body>
 </html>
