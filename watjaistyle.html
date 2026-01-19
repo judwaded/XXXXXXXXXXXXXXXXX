@@ -65,15 +65,15 @@
 
         .text-year { 
             font-family: 'Orbitron', sans-serif; 
-            font-size: clamp(18px, 3.5vw, 32px); /* ปรับขนาดสโลแกนให้เล็กลงแต่ดูหรู */
+            font-size: clamp(18px, 3.5vw, 32px);
             font-weight: 700; 
             margin: 10px 0 0 5px; 
             line-height: 1; 
-            letter-spacing: 12px; /* เพิ่มช่องว่างระหว่างตัวอักษรให้ดูโปร */
+            letter-spacing: 12px; 
             text-transform: uppercase;
             color: var(--accent-color);
             opacity: 0.8;
-            filter: blur(0.3px); /* เพิ่มความนวลเล็กน้อย */
+            filter: blur(0.3px);
         }
         
         .status-bar { margin-top: 15px; font-family: 'Rajdhani', sans-serif; color: var(--sub-text); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; }
@@ -130,7 +130,6 @@
         .fb-btn { margin-top: 20px; width: 100%; padding: 15px; background: #fff; color: #000; text-decoration: none; text-align: center; border-radius: 16px; font-weight: 700; transition: 0.3s; }
         .fb-btn:hover { background: #000; color: #fff; }
 
-       /* --- Footer Design --- */
         .custom-footer {
             padding: 80px 20px;
             background: transparent;
@@ -159,11 +158,6 @@
             font-size: clamp(30px, 4vw, 50px);
             font-weight: 900;
             letter-spacing: -2px;
-        }
-
-        .box-sub-text {
-            font-size: clamp(25px, 3.5vw, 40px);
-            font-weight: 900;
         }
 
         .footer-right-info {
@@ -222,7 +216,7 @@
     <div id="fire-container"></div>
 
     <audio id="bgMusic" loop>
-        <source src="MUSIC.mp3" type="audio/mpeg">
+        <source src="watjaistyle.mp4" type="audio/mpeg">
     </audio>
 
     <div class="main-container">
@@ -339,8 +333,7 @@
                 <p class="profile-role">MEMBER</p>
                 <a href="#" class="fb-btn">VIEW PROFILE</a>
             </div>
-
-            </div>
+        </div>
 
         <footer class="custom-footer">
             <div class="footer-container-centered">
@@ -353,7 +346,7 @@
                     <h2 class="footer-brand-title">WATJAISTYLE</h2>
                     <div class="footer-nav-links">
                         <a href="https://www.facebook.com/jesper.watsutjai">WATJAISTYLE Support</a>
-                        <a href="index.html">Privacy Policy</a>
+                        <a href="home.html">Privacy Policy</a>
                     </div>
                     <p class="copyright-text">© 2026 JUDWADED 2K26. All rights reserved.</p>
                 </div>
@@ -370,6 +363,7 @@
 
         function createFire() {
             const container = document.getElementById('fire-container');
+            if(!container) return;
             const particle = document.createElement('div');
             particle.classList.add('particle');
             const size = Math.random() * 6 + 2 + 'px';
@@ -383,13 +377,20 @@
         setInterval(createFire, 200);
 
         const bgMusic = document.getElementById('bgMusic');
-        bgMusic.volume = 0.1;
-        const startAudio = () => {
+        if(bgMusic) bgMusic.volume = 0.2;
+        
+        const initAudio = () => {
             bgMusic.play().then(() => {
-                ["click", "mousemove", "touchstart"].forEach(ev => document.removeEventListener(ev, startAudio));
+                ["click", "touchstart", "scroll", "wheel", "keydown", "mousemove"].forEach(ev => 
+                    document.removeEventListener(ev, initAudio)
+                );
+            }).catch(() => {
             });
         };
-        ["click", "mousemove", "touchstart"].forEach(ev => document.addEventListener(ev, startAudio));
+
+        ["click", "touchstart", "scroll", "wheel", "keydown", "mousemove"].forEach(ev => 
+            document.addEventListener(ev, initAudio)
+        );
 
         const searchInput = document.getElementById('searchInput');
         const filterBtns = document.querySelectorAll('.filter-btn');
@@ -418,5 +419,4 @@
         });
     </script>
 </body>
-
 </html>
